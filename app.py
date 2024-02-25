@@ -9,6 +9,7 @@ from os import environ
 
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpeg'}
 
+app = Flask(__name__, static_folder='tmp')
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -23,7 +24,7 @@ class File(db.Model):
     region = db.Column(db.String(100))
 
 def create_app():
-    app = Flask(__name__, static_folder='tmp')
+    #app = Flask(__name__, static_folder='tmp')
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite3"
     app.config["Accesskey"] = environ.get('aws_access_key_id')
     app.config["Secretkey"] = environ.get('aws_secret_access_key')
@@ -67,7 +68,8 @@ def create_app():
             # check if the file is a valid image or not
             if not validate_image(data):
                 return "Invalid image file"
-            tmp_dir = '/var/www/file_upload_vuln/tmp'
+            #tmp_dir = '/var/www/file_upload_vuln/tmp'
+            tmp_dir = '/tmp'
             # save the image to disk if it is a valid image
             image.save(os.path.join(tmp_dir,image.filename))
 
@@ -87,4 +89,5 @@ def create_app():
 
     return app
 
-    
+# if __name__ == "__main__":
+#     app.run(debug=True,host='0.0.0.0',port=5000)    
